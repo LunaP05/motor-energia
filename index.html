@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motor Eléctrico - Balance de Potencia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Smooth particle flows */
+    @keyframes flowVertical {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -32; }
+    }
+
+    @keyframes flowLeft {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: 32; }
+    }
+
+    @keyframes flowRight {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -32; }
+    }
+
+    /* Electric Cables Glow Animation */
+    @keyframes electricCurrent {
+      0% { stroke-dashoffset: 40; opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 0.3; }
+    }
+
+    .flow-down-line {
+      stroke-dasharray: 8, 8;
+      animation: flowVertical 0.65s linear infinite;
+    }
+
+    .flow-left-line {
+      stroke-dasharray: 8, 8;
+      animation: flowLeft 0.65s linear infinite;
+    }
+
+    .flow-right-line {
+      stroke-dasharray: 8, 8;
+      animation: flowRight 0.65s linear infinite;
+    }
+
+    .wire-pulse {
+      stroke-dasharray: 10, 15;
+      animation: electricCurrent 0.55s linear infinite;
+    }
+
+    /* Subtle 3D Arrow Breath Effect */
+    @keyframes pulseGlowRed {
+      0%, 100% { filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25)); }
+      50% { filter: drop-shadow(0px 6px 14px rgba(220, 38, 38, 0.45)); }
+    }
+
+    @keyframes pulseGlowGreen {
+      0%, 100% { filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25)); }
+      50% { filter: drop-shadow(0px 6px 14px rgba(22, 163, 74, 0.45)); }
+    }
+
+    .arrow-3d-red {
+      animation: pulseGlowRed 2.5s ease-in-out infinite;
+    }
+
+    .arrow-3d-green {
+      animation: pulseGlowGreen 2.5s ease-in-out infinite;
+    }
+
+    /* Shaft Spinning Visual Motion */
+    @keyframes shaftRotate {
+      0% { transform: translateY(0px); opacity: 0.3; }
+      50% { transform: translateY(-3px); opacity: 0.9; }
+      100% { transform: translateY(0px); opacity: 0.3; }
+    }
+
+    .shaft-motion {
+      animation: shaftRotate 0.25s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-white">
+
+  <!-- STANDALONE CLEAN DIAGRAM CANVAS -->
+  <div class="w-full max-w-[880px] p-2 flex items-center justify-center">
+    
+    <svg viewBox="0 0 880 460" class="w-full h-auto select-none overflow-visible" xmlns="http://www.w3.org/2000/svg">
+      
+      <defs>
+        <!-- RED 3D GRADIENTS -->
+        <linearGradient id="redMainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ff4d4d" />
+          <stop offset="40%" stop-color="#dc2626" />
+          <stop offset="100%" stop-color="#881337" />
+        </linearGradient>
+
+        <linearGradient id="redHorizGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ef4444" />
+          <stop offset="60%" stop-color="#dc2626" />
+          <stop offset="100%" stop-color="#991b1b" />
+        </linearGradient>
+
+        <linearGradient id="redBevelHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0" />
+        </linearGradient>
+
+        <!-- GREEN 3D GRADIENT -->
+        <linearGradient id="greenGrad" x1="100%" y1="0%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#4ade80" />
+          <stop offset="50%" stop-color="#16a34a" />
+          <stop offset="100%" stop-color="#064e3b" />
+        </linearGradient>
+
+        <!-- MOTOR BODY METALLIC GRADIENTS -->
+        <linearGradient id="motorBody" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f1f5f9" />
+          <stop offset="20%" stop-color="#cbd5e1" />
+          <stop offset="65%" stop-color="#64748b" />
+          <stop offset="100%" stop-color="#334155" />
+        </linearGradient>
+
+        <linearGradient id="finGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#94a3b8" />
+          <stop offset="50%" stop-color="#475569" />
+          <stop offset="100%" stop-color="#1e293b" />
+        </linearGradient>
+
+        <linearGradient id="shaftGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="50%" stop-color="#94a3b8" />
+          <stop offset="100%" stop-color="#334155" />
+        </linearGradient>
+
+        <!-- DROP SHADOW FILTERS -->
+        <filter id="shadow3D" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="2" dy="4" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.3" />
+        </filter>
+        
+        <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.25" />
+        </filter>
+      </defs>
+
+      <!-- 1. BASE FOOT STAND -->
+      <g filter="url(#softShadow)">
+        <rect x="375" y="380" width="180" height="16" rx="3" fill="#334155" stroke="#0f172a" stroke-width="1.5"/>
+        <rect x="360" y="396" width="210" height="10" rx="3" fill="#0f172a"/>
+      </g>
+
+      <!-- 2. MOTOR SHAFT (EJE MECÁNICO ROTATIVO) -->
+      <g filter="url(#softShadow)">
+        <rect x="230" y="270" width="155" height="18" rx="3" fill="url(#shaftGrad)" stroke="#334155" stroke-width="1.5"/>
+        <!-- Shaft Spin Effect Lines -->
+        <g class="shaft-motion" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.7">
+          <line x1="245" y1="274" x2="335" y2="274" />
+          <line x1="255" y1="282" x2="345" y2="282" />
+        </g>
+      </g>
+
+      <!-- 3. MOTOR MAIN HOUSING (CUERPO DEL MOTOR) -->
+      <g filter="url(#shadow3D)">
+        <!-- Rear Dome (Right) -->
+        <path d="M 555,190 Q 595,279 555,368 Z" fill="#475569" stroke="#0f172a" stroke-width="2"/>
+        <ellipse cx="555" cy="279" rx="14" ry="88" fill="#334155" stroke="#0f172a" stroke-width="1.5"/>
+
+        <!-- Main Ribbed Cylinder -->
+        <rect x="380" y="190" width="175" height="178" rx="10" fill="url(#motorBody)" stroke="#0f172a" stroke-width="2"/>
+
+        <!-- Cooling Fins -->
+        <g fill="url(#finGrad)" stroke="#0f172a" stroke-width="1.2">
+          <rect x="385" y="198" width="160" height="11" rx="2"/>
+          <rect x="385" y="217" width="160" height="11" rx="2"/>
+          <rect x="385" y="236" width="160" height="11" rx="2"/>
+          <rect x="385" y="255" width="160" height="11" rx="2"/>
+          <rect x="385" y="274" width="160" height="11" rx="2"/>
+          <rect x="385" y="293" width="160" height="11" rx="2"/>
+          <rect x="385" y="312" width="160" height="11" rx="2"/>
+          <rect x="385" y="331" width="160" height="11" rx="2"/>
+          <rect x="385" y="350" width="160" height="11" rx="2"/>
+        </g>
+
+        <!-- Front Cap (Left) -->
+        <path d="M 380,190 Q 350,279 380,368 Z" fill="#94a3b8" stroke="#0f172a" stroke-width="2"/>
+
+        <!-- Lifting Ring Eyelet -->
+        <circle cx="460" cy="170" r="14" fill="none" stroke="#334155" stroke-width="5" filter="url(#softShadow)"/>
+        <circle cx="460" cy="170" r="14" fill="none" stroke="#0f172a" stroke-width="1.5"/>
+        <rect x="452" y="180" width="16" height="12" fill="#334155" stroke="#0f172a" stroke-width="1.5"/>
+
+        <!-- Center Inspection Plate -->
+        <rect x="425" y="238" width="75" height="82" rx="12" fill="#94a3b8" stroke="#1e293b" stroke-width="2"/>
+        <rect x="430" y="243" width="65" height="72" rx="8" fill="#cbd5e1"/>
+      </g>
+
+      <!-- 4. ANIMATED BLUE ELECTRICAL CABLES -->
+      <g filter="url(#softShadow)">
+        <g stroke="#1d4ed8" stroke-width="3" fill="none" opacity="0.4">
+          <line x1="447" y1="70" x2="447" y2="265" />
+          <line x1="462" y1="70" x2="462" y2="265" />
+          <line x1="477" y1="70" x2="477" y2="265" />
+        </g>
+        <g stroke="#38bdf8" stroke-width="3" stroke-linecap="round" fill="none" class="wire-pulse">
+          <line x1="447" y1="70" x2="447" y2="265" />
+          <line x1="462" y1="70" x2="462" y2="265" />
+          <line x1="477" y1="70" x2="477" y2="265" />
+        </g>
+      </g>
+
+      <!-- 5. RED ARROW 1: ENERGÍA ELÉCTRICA ENTRANTE (TOP - Sleek 3D) -->
+      <g class="arrow-3d-red">
+        <!-- Main Red 3D Arrow Path -->
+        <path d="M 510,18 L 542,18 L 542,120 L 558,120 L 526,172 L 494,120 L 510,120 Z" 
+              fill="url(#redMainGrad)" stroke="#7f1d1d" stroke-width="1.5" filter="url(#shadow3D)"/>
+
+        <!-- Bevel Highlight Edge -->
+        <path d="M 510,18 L 526,18 L 526,120 L 542,120 L 526,172 L 494,120 L 510,120 Z" 
+              fill="url(#redBevelHighlight)" />
+
+        <!-- Inner Flow Line -->
+        <path d="M 526,24 L 526,158" 
+              stroke="#fef08a" stroke-width="3.5" stroke-linecap="round" fill="none" class="flow-down-line" opacity="0.95"/>
+
+        <!-- Label -->
+        <text x="580" y="52" font-size="20" font-weight="800" fill="#000000">
+          Energía Eléctrica
+        </text>
+        <text x="580" y="78" font-size="20" font-weight="800" fill="#000000">
+          Entrante
+        </text>
+      </g>
+
+      <!-- 6. GREEN ARROW 2: ENERGÍA MECÁNICA SALIENTE (LEFT - Sleek 3D) -->
+      <g class="arrow-3d-green">
+        <!-- Main Green 3D Arrow Path -->
+        <path d="M 265,302 L 265,324 L 130,324 L 130,340 L 45,313 L 130,286 L 130,302 Z" 
+              fill="url(#greenGrad)" stroke="#064e3b" stroke-width="1.5" filter="url(#shadow3D)"/>
+
+        <!-- Bevel Upper Highlight -->
+        <path d="M 265,302 L 265,313 L 130,313 L 130,313 L 45,313 L 130,286 L 130,302 Z" 
+              fill="#ffffff" opacity="0.22"/>
+
+        <!-- Inner Flow Line -->
+        <path d="M 255,313 L 58,313" 
+              stroke="#bbf7d0" stroke-width="3.5" stroke-linecap="round" fill="none" class="flow-left-line" opacity="0.95"/>
+
+        <!-- Label -->
+        <text x="25" y="230" font-size="20" font-weight="800" fill="#000000">
+          Energía Mecánica
+        </text>
+        <text x="25" y="256" font-size="20" font-weight="800" fill="#000000">
+          Saliente
+        </text>
+      </g>
+
+      <!-- 7. RED ARROW 3: PÉRDIDAS (SMOOTH CURVED TRIPLE SPLIT) -->
+      <g class="arrow-3d-red">
+        <!-- Perfectly Curving & Blended 3-Head Loss Arrow Body -->
+        <path d="M 540,296 
+                 C 580,296 600,242 622,230 L 615,216 L 668,235 L 646,275 L 634,261 C 618,272 605,290 615,296 
+                 L 680,296 L 680,278 L 736,309 L 680,340 L 680,322 
+                 L 615,322 C 605,328 618,346 634,357 L 646,343 L 668,383 L 615,402 L 622,388 
+                 C 600,376 580,322 540,322 Z" 
+              fill="url(#redHorizGrad)" stroke="#7f1d1d" stroke-width="1.5" filter="url(#shadow3D)"/>
+
+        <!-- Top Bevel Curved Specular Overlay -->
+        <path d="M 540,296 C 580,296 600,242 622,230 L 615,216 L 668,235 L 634,261 C 618,272 600,296 540,309 Z" 
+              fill="#ffffff" opacity="0.22"/>
+
+        <!-- Animated Energy Particle Rays inside the 3 Branches -->
+        <!-- Center Straight Ray -->
+        <path d="M 545,309 L 718,309" 
+              stroke="#fef08a" stroke-width="3" stroke-linecap="round" fill="none" class="flow-right-line" opacity="0.95"/>
+        <!-- Top Curve Ray -->
+        <path d="M 550,302 C 585,302 605,255 650,238" 
+              stroke="#fef08a" stroke-width="2.8" stroke-linecap="round" fill="none" class="flow-right-line" opacity="0.9"/>
+        <!-- Bottom Curve Ray -->
+        <path d="M 550,316 C 585,316 605,363 650,380" 
+              stroke="#fef08a" stroke-width="2.8" stroke-linecap="round" fill="none" class="flow-right-line" opacity="0.9"/>
+
+        <!-- Label -->
+        <text x="650" y="190" font-size="20" font-weight="800" fill="#000000">
+          Pérdidas
+        </text>
+      </g>
+
+    </svg>
+
+  </div>
+
+</body>
+</html>
